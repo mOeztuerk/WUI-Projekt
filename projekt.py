@@ -19,8 +19,9 @@ def import_tagsets(filename):
 class Window(QtGui.QMainWindow):
     def __init__(self, tagset):
         super(Window, self).__init__()
-        # groupslist = buttonBereich
+        self.setWindowTitle("POS")
         self.tagset = tagset
+        # groupslist = buttonBereich
         self.buttonBereich = QtGui.QListWidget()
         self.text1 = QtGui.QTextEdit(self)
         self.text2 = QtGui.QTextEdit(self)
@@ -39,6 +40,12 @@ class Window(QtGui.QMainWindow):
         self.splitter.setStretchFactor(1, 3)
         self.editorSplitter.setStretchFactor(2, 4)
 
+
+        # newAction zum saeubern der Editor
+        newAction = QtGui.QAction("New", self)
+        newAction.setShortcut("Ctrl+N")
+        newAction.setStatusTip("Create a new document from scratch.")
+        newAction.triggered.connect(self.new)
         # schließt die Anwendung
         quitApp = QtGui.QAction("Quit", self)
         quitApp.setShortcut("Ctrl+Q")
@@ -61,11 +68,13 @@ class Window(QtGui.QMainWindow):
         help = menuBar.addMenu('&Help')
 
         # menuunterpunkt File
+        file.addAction(newAction)
         file.addAction(openFile)
         file.addAction(quitApp)
         
         # create statusbar
-        self.statusBar()
+        self.statusBar().showMessage("Mustafa Öztürk    |    FAU Erlangen-Nürnberg    |    mustafa.oeztuerk@fau.de")
+        
         self.home(self.tagset)
 
     def make_calluser(self, name):
@@ -89,13 +98,18 @@ class Window(QtGui.QMainWindow):
             grid.addWidget(button, *position)
 
 
-
+    def new(self):
+        choice = QtGui.QMessageBox.question(self, "Question", "Clear Editors?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        if choice == QtGui.QMessageBox.Yes:
+            self.text1.clear()
+            self.text2.clear()
+        else:
+            pass
+        
     def file_open(self):
         """ oeffnet eine Datei im oberen Editor """
         name = QtGui.QFileDialog.getOpenFileName(self, 'Open File')
         file = open(name, 'r')
-
-        # self.text1()
 
         with file:
             text = file.read()
