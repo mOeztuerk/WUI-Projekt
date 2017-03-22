@@ -58,7 +58,10 @@ class Window(QtGui.QMainWindow):
         openFile = QtGui.QAction("&Open File", self)
         openFile.setShortcut("Ctrl+O")
         openFile.triggered.connect(self.file_open)
-
+        # speichert das was im unteren Editor ist
+        save = QtGui.QAction("Save", self)
+        save.setShortcut("Ctrl+S")
+        save.triggered.connect(self.speichern)
         
         # create menubar
         menuBar = self.menuBar()
@@ -71,6 +74,7 @@ class Window(QtGui.QMainWindow):
         # menuunterpunkt File
         file.addAction(newAction)
         file.addAction(openFile)
+        file.addAction(save)
         file.addSeparator()
         file.addAction(quitApp)
 
@@ -119,6 +123,14 @@ class Window(QtGui.QMainWindow):
         with file:
             text = file.read()
             self.text1.setText(text)
+
+    def speichern(self):
+        """ speichert den Text im unteren Editor"""
+        name = QtGui.QFileDialog.getSaveFileName(self, 'Save File')
+        file = open(name, 'w')
+        text = self.text2.toPlainText()
+        file.write(text)
+        file.close()
 
     def close_application(self):
         """ schließt die Anwendung"""
