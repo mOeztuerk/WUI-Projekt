@@ -41,21 +41,22 @@ class Window(QtGui.QMainWindow):
         self.editorSplitter.setStretchFactor(2, 4)
 
 
+
+        # STTS-tagset wird im browser geoffnet
+        helpSTTS = QtGui.QAction("STTS Tag Table", self)
+        helpSTTS.triggered.connect(self.stts_link)
         # newAction zum saeubern der Editor
         newAction = QtGui.QAction("New", self)
         newAction.setShortcut("Ctrl+N")
-        newAction.setStatusTip("Create a new document from scratch.")
         newAction.triggered.connect(self.new)
         # schließt die Anwendung
         quitApp = QtGui.QAction("Quit", self)
         quitApp.setShortcut("Ctrl+Q")
-        quitApp.setStatusTip('Leave the App')
         quitApp.triggered.connect(self.close_application)
 
         # oeffnet eine datei
         openFile = QtGui.QAction("&Open File", self)
         openFile.setShortcut("Ctrl+O")
-        openFile.setStatusTip('Open File')
         openFile.triggered.connect(self.file_open)
 
         
@@ -70,7 +71,11 @@ class Window(QtGui.QMainWindow):
         # menuunterpunkt File
         file.addAction(newAction)
         file.addAction(openFile)
+        file.addSeparator()
         file.addAction(quitApp)
+
+        # menuunterpunkt Help
+        help.addAction(helpSTTS)
         
         # create statusbar
         self.statusBar().showMessage("Mustafa Öztürk    |    FAU Erlangen-Nürnberg    |    mustafa.oeztuerk@fau.de")
@@ -122,6 +127,12 @@ class Window(QtGui.QMainWindow):
             sys.exit()
         else:
             pass
+
+
+    def stts_link(self):
+        url = QtCore.QUrl('http://www.ims.uni-stuttgart.de/forschung/ressourcen/lexika/TagSets/stts-table.html')
+        if not QtGui.QDesktopServices.openUrl(url):
+            QtGui.QMessageBox.warning(self, 'Open Url', 'Could not open url')
 
 
 def run():
