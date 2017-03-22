@@ -5,6 +5,7 @@ import yaml
 from PyQt4 import QtGui, QtCore
 from PyQt4 import Qt
 
+
 def import_tagsets(filename):
     with open(filename, 'r') as stream:
         try:
@@ -13,6 +14,7 @@ def import_tagsets(filename):
             print(exc)
 
     return tagsets
+
 
 class Window(QtGui.QMainWindow):
     def __init__(self, tagset):
@@ -37,6 +39,33 @@ class Window(QtGui.QMainWindow):
         self.splitter.setStretchFactor(1, 3)
         self.editorSplitter.setStretchFactor(2, 4)
 
+        # schließt die Anwendung
+        quitApp = QtGui.QAction("Quit", self)
+        quitApp.setShortcut("Ctrl+Q")
+        quitApp.setStatusTip('Leave the App')
+        quitApp.triggered.connect(self.close_application)
+
+        # oeffnet eine datei
+        openFile = QtGui.QAction("&Open File", self)
+        openFile.setShortcut("Ctrl+O")
+        openFile.setStatusTip('Open File')
+        openFile.triggered.connect(self.file_open)
+
+        
+        # create menubar
+        menuBar = self.menuBar()
+        # unterpunkte File, Edit und View , Help werden erstellt
+        file = menuBar.addMenu('&File')        
+        edit = menuBar.addMenu('&Edit')
+        view = menuBar.addMenu('&View')
+        help = menuBar.addMenu('&Help')
+
+        # menuunterpunkt File
+        file.addAction(openFile)
+        file.addAction(quitApp)
+        
+        # create statusbar
+        self.statusBar()
         self.home(self.tagset)
 
     def make_calluser(self, name):
@@ -58,6 +87,27 @@ class Window(QtGui.QMainWindow):
             button = QtGui.QPushButton(name, self)
             button.clicked.connect(self.make_calluser(name))
             grid.addWidget(button, *position)
+
+
+
+    def file_open(self):
+        """ oeffnet eine Datei im oberen Editor """
+        name = QtGui.QFileDialog.getOpenFileName(self, 'Open File')
+        file = open(name, 'r')
+
+        # self.text1()
+
+        with file:
+            text = file.read()
+            self.text1.setText(text)
+
+    def close_application(self):
+        """ schließt die Anwendung"""
+        choice = QtGui.QMessageBox.question(self, "Question", "Quit?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        if choice == QtGui.QMessageBox.Yes:
+            sys.exit()
+        else:
+            pass
 
 
 def run():
