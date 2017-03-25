@@ -62,12 +62,68 @@ class Window(QtGui.QMainWindow):
         save = QtGui.QAction("Save", self)
         save.setShortcut("Ctrl+S")
         save.triggered.connect(self.speichern)
+
+
+        #############EDIT EDITOR 1##############
+        #Edit: Cut
+        cutAction1 = QtGui.QAction("Cut to clipboard", self)
+        cutAction1.setShortcut("Ctrl+X")
+        cutAction1.triggered.connect(self.text1.cut)
+
+        #Edit: Copy
+        copyAction1 = QtGui.QAction("Copy to clipboard", self)
+        copyAction1.setShortcut("Ctrl+C")
+        copyAction1.triggered.connect(self.text1.copy)
+
+        # Edit: Paste
+        pasteAction1 = QtGui.QAction("Paste from clipboard", self)
+        pasteAction1.setShortcut("Ctrl+V")
+        pasteAction1.triggered.connect(self.text1.paste)
+
+        # Edit: Undo
+        undoAction1 = QtGui.QAction("Undo last action", self)
+        undoAction1.setShortcut("Ctrl+Z")
+        undoAction1.triggered.connect(self.text1.undo)
+
+        # Edit: Redo
+        redoAction1 = QtGui.QAction("Redo last action", self)
+        redoAction1.setShortcut("Ctrl+Y")
+        redoAction1.triggered.connect(self.text1.redo)
+        
+        #################EDIT EDITOR 2######################
+
+        #Edit: Cut
+        cutAction2 = QtGui.QAction("Cut to clipboard", self)
+        cutAction2.setShortcut("Ctrl+X")
+        cutAction2.triggered.connect(self.text2.cut)
+
+        #Edit: Copy
+        copyAction2 = QtGui.QAction("Copy to clipboard", self)
+        copyAction2.setShortcut("Ctrl+C")
+        copyAction2.triggered.connect(self.text2.copy)
+
+        #Edit: Paste
+        pasteAction2 = QtGui.QAction("Paste from clipboard", self)
+        pasteAction2.setShortcut("Ctrl+V")
+        pasteAction2.triggered.connect(self.text2.paste)
+
+        #Edit: Undo
+        undoAction2 = QtGui.QAction("Undo last action", self)
+        undoAction2.setShortcut("Ctrl+Z")
+        undoAction2.triggered.connect(self.text2.undo)
+
+        #Edit: Redo
+        redoAction2 = QtGui.QAction("Redo last action", self)
+        redoAction2.setShortcut("Ctrl+Y")
+        redoAction2.triggered.connect(self.text2.redo)
+        #################END EDIT EDITOR 2#########
         
         # create menubar
         menuBar = self.menuBar()
         # unterpunkte File, Edit und View , Help werden erstellt
         file = menuBar.addMenu('&File')        
-        edit = menuBar.addMenu('&Edit')
+        edit1 = menuBar.addMenu('&Edit Editor 1')
+        edit2 = menuBar.addMenu('&Edit Editor 2')
         view = menuBar.addMenu('&View')
         help = menuBar.addMenu('&Help')
 
@@ -78,6 +134,22 @@ class Window(QtGui.QMainWindow):
         file.addSeparator()
         file.addAction(quitApp)
 
+        #menuunterpunkt Edit Editor 1
+        edit1.addAction(cutAction1)
+        edit1.addAction(copyAction1)
+        edit1.addAction(pasteAction1)
+        edit1.addSeparator()
+        edit1.addAction(undoAction1)
+        edit1.addAction(redoAction1)
+
+        #menuunterpunkt Edit Editor 2
+        edit2.addAction(cutAction2)
+        edit2.addAction(copyAction2)
+        edit2.addAction(pasteAction2)
+        edit2.addSeparator()
+        edit2.addAction(undoAction2)
+        edit2.addAction(redoAction2)
+        
         # menuunterpunkt Help
         help.addAction(helpSTTS)
         
