@@ -155,7 +155,13 @@ class Window(QtGui.QMainWindow):
         
         # create statusbar
         self.statusBar().showMessage("Mustafa Öztürk    |    FAU Erlangen-Nürnberg    |    mustafa.oeztuerk@fau.de")
-        
+
+
+        # Schriftgröße
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.text1.setFont(font)
+        self.text2.setFont(font)
         self.home(self.tagset)
 
     def make_calluser(self, name):
