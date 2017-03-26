@@ -201,9 +201,12 @@ class Window(QtGui.QMainWindow):
         with open(name, 'r') as file:
             text = file.read()
             self.text1.setText(text)
+            # print aktuell geöffneten text
             print(text)
-            words = [word for line in text for word in line.split()]
-            print(words)
+            #words = [word
+                     #for line in text
+                     #for word in line.split()]
+            words = text.split()
         self.read_from_Editor(words)
 
 
@@ -243,7 +246,6 @@ class Window(QtGui.QMainWindow):
         #print(lines)
         self.words = words
         listoflists = []
-        print("x")
         for i in range(0, len(words)):
             listoflists.append((words[i], None))
         print(listoflists)
