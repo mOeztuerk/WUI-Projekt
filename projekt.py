@@ -134,7 +134,7 @@ class Window(QtGui.QMainWindow):
         file.addSeparator()
         file.addAction(quitApp)
 
-        #menuunterpunkt Edit Editor 1
+        # menuunterpunkt Edit Editor 1
         edit1.addAction(cutAction1)
         edit1.addAction(copyAction1)
         edit1.addAction(pasteAction1)
@@ -142,7 +142,7 @@ class Window(QtGui.QMainWindow):
         edit1.addAction(undoAction1)
         edit1.addAction(redoAction1)
 
-        #menuunterpunkt Edit Editor 2
+        # menuunterpunkt Edit Editor 2
         edit2.addAction(cutAction2)
         edit2.addAction(copyAction2)
         edit2.addAction(pasteAction2)
@@ -190,11 +190,24 @@ class Window(QtGui.QMainWindow):
     def file_open(self):
         """ oeffnet eine Datei im oberen Editor """
         name = QtGui.QFileDialog.getOpenFileName(self, 'Open File')
-        file = open(name, 'r')
-
+        """file = open(name, 'r')
         with file:
             text = file.read()
             self.text1.setText(text)
+            print(text)
+            #test
+            words = [word for line in text for word in line.split()]
+            print(words)"""
+        with open(name, 'r') as file:
+            text = file.read()
+            self.text1.setText(text)
+            print(text)
+            words = [word for line in text for word in line.split()]
+            print(words)
+        self.read_from_Editor(words)
+
+
+
 
     def speichern(self):
         """ speichert den Text im unteren Editor"""
@@ -212,12 +225,28 @@ class Window(QtGui.QMainWindow):
         else:
             pass
 
-
     def stts_link(self):
         url = QtCore.QUrl('http://www.ims.uni-stuttgart.de/forschung/ressourcen/lexika/TagSets/stts-table.html')
         if not QtGui.QDesktopServices.openUrl(url):
             QtGui.QMessageBox.warning(self, 'Open Url', 'Could not open url')
 
+
+
+    def read_from_Editor(self, words):
+        """ reading text from a QTextEdit widget"""
+        #doc = self.text1.document()
+        #block = doc.begin()
+        #lines = [block.text()]
+        #for i in range (1, doc.blockCount() ):
+            #block = block.next()
+            #lines.append(block.text())
+        #print(lines)
+        self.words = words
+        listoflists = []
+        print("x")
+        for i in range(0, len(words)):
+            listoflists.append((words[i], None))
+        print(listoflists)
 
 def run():
     mytags = import_tagsets('tagset.yaml')
