@@ -25,11 +25,23 @@ class Window(QtGui.QMainWindow):
         self.buttonBereich = QtGui.QListWidget()
         self.text1 = QtGui.QTextEdit(self)
         self.text2 = QtGui.QTextEdit(self)
+
+        # Buttons zwischen den Editoren
+        self.widg = QtGui.QWidget()
+        self.hbox = QtGui.QHBoxLayout()
+        self.startButton = QtGui.QPushButton("Start")
+        self.testButton = QtGui.QPushButton("Test")
+        self.nextButton = QtGui.QPushButton("Next")
+        self.hbox.addWidget(self.startButton)
+        self.hbox.addWidget(self.testButton)
+        self.hbox.addWidget(self.nextButton)
+        self.widg.setLayout(self.hbox)
         # unterteilt in obere und untere Editor
         # splitter = mainSplitter
         # editorSplitter = messageSplitter
         self.editorSplitter = QtGui.QSplitter(QtCore.Qt.Vertical)
         self.editorSplitter.addWidget(self.text1)
+        self.editorSplitter.addWidget(self.widg)
         self.editorSplitter.addWidget(self.text2)
         self.splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
         self.splitter.addWidget(self.buttonBereich)
@@ -38,7 +50,7 @@ class Window(QtGui.QMainWindow):
 
         # hoehe und breite fuer die splits
         self.splitter.setStretchFactor(1, 3)
-        self.editorSplitter.setStretchFactor(2, 4)
+        self.editorSplitter.setStretchFactor(10, 10)
 
 
 
