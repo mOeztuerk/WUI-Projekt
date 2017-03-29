@@ -26,16 +26,23 @@ class Window(QtGui.QMainWindow):
         self.text1 = QtGui.QTextEdit(self)
         self.text2 = QtGui.QTextEdit(self)
 
+        # read only text editor 1
+        self.text1.setReadOnly(True)
+        self.text1.setTextInteractionFlags(self.text1.textInteractionFlags() | QtCore.Qt.TextSelectableByKeyboard)
         # Buttons zwischen den Editoren
         self.widg = QtGui.QWidget()
         self.hbox = QtGui.QHBoxLayout()
-        self.startButton = QtGui.QPushButton("Start")
+        self.startButton = QtGui.QPushButton("START")
         self.testButton = QtGui.QPushButton("Test")
         self.nextButton = QtGui.QPushButton("Next")
         self.hbox.addWidget(self.startButton)
         self.hbox.addWidget(self.testButton)
         self.hbox.addWidget(self.nextButton)
         self.widg.setLayout(self.hbox)
+
+        # wenn der START-Button gedrückt wird soll passieren:
+        self.startButton.clicked.connect(self.set_cursor_in_edit1_to_startposition)
+        self.nextButton.clicked.connect(self.nextButton_clicked)
         # unterteilt in obere und untere Editor
         # splitter = mainSplitter
         # editorSplitter = messageSplitter
@@ -180,7 +187,7 @@ class Window(QtGui.QMainWindow):
         # http://stackoverflow.com/questions/6784084/how-to-pass-arguments-to-functions-by-the-click-of-button-in-pyqt
         def calluser():
             print(name)
-            self.text1.insertPlainText(name + " ")
+            self.text2.insertPlainText(name + " ")
         return calluser
 
     def home(self, tagset):
@@ -268,6 +275,20 @@ class Window(QtGui.QMainWindow):
             listoflists.append((words[i], None))
         print(listoflists)
 
+
+
+    def set_cursor_in_edit1_to_startposition(self):
+        """Mit dem START-Button wird der Cursor an den Anfang gesetzt, Cursor dient als Marker, um die Wörter einzeln zu Taggen. Und Editor Nr. 2 wird gecleart"""
+        cursor = self.text1.textCursor()
+        cursor.movePosition(0, QtGui.QTextCursor.MoveAnchor)
+        self.text1.setTextCursor(cursor)
+        QtCore.QCoreApplication.sendEvent(self.text1, QtGui.QKeyEvent(QtCore.QEvent.KeyPress, QtCore.Qt.Key_Up, QtCore.Qt.NoModifier))
+        #self.text1.moveCursor(QtGui.QTextCursor.NextWord, QtGui.QTextCursor.MoveAnchor)
+        self.text2.clear()
+
+    def nextButton_clicked(self):
+        """ Der Cursor wird zum nächsten Wort bewegt, damit der Benutzer sehen kann, welches Wort grad getaggt wird"""
+        self.text1.moveCursor(QtGui.QTextCursor.NextWord, QtGui.QTextCursor.MoveAnchor)
 def run():
     mytags = import_tagsets('tagset.yaml')
     app = QtGui.QApplication(sys.argv)
