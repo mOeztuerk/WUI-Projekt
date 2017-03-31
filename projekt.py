@@ -41,8 +41,6 @@ class Window(QtGui.QMainWindow):
         self.nextButton.clicked.connect(self.nextButton_clicked)
         self.skipButton.clicked.connect(self.skipping)
         # unterteilt in obere und untere Editor
-        # splitter = mainSplitter
-        # editorSplitter = messageSplitter
         self.editorSplitter = QtGui.QSplitter(QtCore.Qt.Vertical)
         self.editorSplitter.addWidget(self.widg)
         self.editorSplitter.addWidget(self.text)
