@@ -19,37 +19,33 @@ def import_tagsets(filename):
 class Window(QtGui.QMainWindow):
     def __init__(self, tagset):
         super(Window, self).__init__()
-        self.setWindowTitle("POS")
+        self.setWindowTitle("POS-Tagger")
         self.tagset = tagset
         # groupslist = buttonBereich
         self.buttonBereich = QtGui.QListWidget()
-        self.text1 = QtGui.QTextEdit(self)
-        self.text2 = QtGui.QTextEdit(self)
+        self.text = QtGui.QTextEdit(self)
 
-        # read only text editor 1
-        self.text1.setReadOnly(True)
-        self.text1.setTextInteractionFlags(self.text1.textInteractionFlags() | QtCore.Qt.TextSelectableByKeyboard)
         # Buttons zwischen den Editoren
         self.widg = QtGui.QWidget()
         self.hbox = QtGui.QHBoxLayout()
         self.startButton = QtGui.QPushButton("START")
-        self.testButton = QtGui.QPushButton("Test")
-        self.nextButton = QtGui.QPushButton("Next")
+        self.skipButton = QtGui.QPushButton("SKIP")
+        self.nextButton = QtGui.QPushButton("NEXT")
         self.hbox.addWidget(self.startButton)
-        self.hbox.addWidget(self.testButton)
+        self.hbox.addWidget(self.skipButton)
         self.hbox.addWidget(self.nextButton)
         self.widg.setLayout(self.hbox)
 
         # wenn der START-Button gedrückt wird soll passieren:
-        self.startButton.clicked.connect(self.set_cursor_in_edit1_to_startposition)
+        self.startButton.clicked.connect(self.starting)
         self.nextButton.clicked.connect(self.nextButton_clicked)
+        self.skipButton.clicked.connect(self.skipping)
         # unterteilt in obere und untere Editor
         # splitter = mainSplitter
         # editorSplitter = messageSplitter
         self.editorSplitter = QtGui.QSplitter(QtCore.Qt.Vertical)
-        self.editorSplitter.addWidget(self.text1)
         self.editorSplitter.addWidget(self.widg)
-        self.editorSplitter.addWidget(self.text2)
+        self.editorSplitter.addWidget(self.text)
         self.splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
         self.splitter.addWidget(self.buttonBereich)
         self.splitter.addWidget(self.editorSplitter)
@@ -57,7 +53,7 @@ class Window(QtGui.QMainWindow):
 
         # hoehe und breite fuer die splits
         self.splitter.setStretchFactor(1, 3)
-        self.editorSplitter.setStretchFactor(10, 10)
+        self.editorSplitter.setStretchFactor(1, 4)
 
 
 
@@ -82,68 +78,44 @@ class Window(QtGui.QMainWindow):
         save.setShortcut("Ctrl+S")
         save.triggered.connect(self.speichern)
 
+        # speichert das Ergebnis als PDF
+        pdfAction = QtGui.QAction("Save to PDF", self)
+        pdfAction.setShortcut("Ctrl+P")
+        pdfAction.triggered.connect(self.SavetoPDF)
+        #################EDIT EDITOR ######################
 
-        #############EDIT EDITOR 1##############
-        #Edit: Cut
-        cutAction1 = QtGui.QAction("Cut to clipboard", self)
-        cutAction1.setShortcut("Ctrl+X")
-        cutAction1.triggered.connect(self.text1.cut)
+        # Edit: Cut
+        cutAction = QtGui.QAction("Cut to clipboard", self)
+        cutAction.setShortcut("Ctrl+X")
+        cutAction.triggered.connect(self.text.cut)
 
-        #Edit: Copy
-        copyAction1 = QtGui.QAction("Copy to clipboard", self)
-        copyAction1.setShortcut("Ctrl+C")
-        copyAction1.triggered.connect(self.text1.copy)
+        # Edit: Copy
+        copyAction = QtGui.QAction("Copy to clipboard", self)
+        copyAction.setShortcut("Ctrl+C")
+        copyAction.triggered.connect(self.text.copy)
 
         # Edit: Paste
-        pasteAction1 = QtGui.QAction("Paste from clipboard", self)
-        pasteAction1.setShortcut("Ctrl+V")
-        pasteAction1.triggered.connect(self.text1.paste)
+        pasteAction = QtGui.QAction("Paste from clipboard", self)
+        pasteAction.setShortcut("Ctrl+V")
+        pasteAction.triggered.connect(self.text.paste)
 
         # Edit: Undo
-        undoAction1 = QtGui.QAction("Undo last action", self)
-        undoAction1.setShortcut("Ctrl+Z")
-        undoAction1.triggered.connect(self.text1.undo)
+        undoAction = QtGui.QAction("Undo last action", self)
+        undoAction.setShortcut("Ctrl+Z")
+        undoAction.triggered.connect(self.text.undo)
 
         # Edit: Redo
-        redoAction1 = QtGui.QAction("Redo last action", self)
-        redoAction1.setShortcut("Ctrl+Y")
-        redoAction1.triggered.connect(self.text1.redo)
-        
-        #################EDIT EDITOR 2######################
-
-        #Edit: Cut
-        cutAction2 = QtGui.QAction("Cut to clipboard", self)
-        cutAction2.setShortcut("Ctrl+X")
-        cutAction2.triggered.connect(self.text2.cut)
-
-        #Edit: Copy
-        copyAction2 = QtGui.QAction("Copy to clipboard", self)
-        copyAction2.setShortcut("Ctrl+C")
-        copyAction2.triggered.connect(self.text2.copy)
-
-        #Edit: Paste
-        pasteAction2 = QtGui.QAction("Paste from clipboard", self)
-        pasteAction2.setShortcut("Ctrl+V")
-        pasteAction2.triggered.connect(self.text2.paste)
-
-        #Edit: Undo
-        undoAction2 = QtGui.QAction("Undo last action", self)
-        undoAction2.setShortcut("Ctrl+Z")
-        undoAction2.triggered.connect(self.text2.undo)
-
-        #Edit: Redo
-        redoAction2 = QtGui.QAction("Redo last action", self)
-        redoAction2.setShortcut("Ctrl+Y")
-        redoAction2.triggered.connect(self.text2.redo)
-        #################END EDIT EDITOR 2#########
+        redoAction = QtGui.QAction("Redo last action", self)
+        redoAction.setShortcut("Ctrl+Y")
+        redoAction.triggered.connect(self.text.redo)
+        #################END EDIT EDITOR #########
         
         # create menubar
         menuBar = self.menuBar()
         # unterpunkte File, Edit und View , Help werden erstellt
         file = menuBar.addMenu('&File')        
-        edit1 = menuBar.addMenu('&Edit Editor 1')
-        edit2 = menuBar.addMenu('&Edit Editor 2')
-        view = menuBar.addMenu('&View')
+        edit = menuBar.addMenu('&Edit')
+        pdf = menuBar.addMenu('&PDF')
         help = menuBar.addMenu('&Help')
 
         # menuunterpunkt File
@@ -153,41 +125,32 @@ class Window(QtGui.QMainWindow):
         file.addSeparator()
         file.addAction(quitApp)
 
-        # menuunterpunkt Edit Editor 1
-        edit1.addAction(cutAction1)
-        edit1.addAction(copyAction1)
-        edit1.addAction(pasteAction1)
-        edit1.addSeparator()
-        edit1.addAction(undoAction1)
-        edit1.addAction(redoAction1)
+        # menuunterpunkt Edit
+        edit.addAction(cutAction)
+        edit.addAction(copyAction)
+        edit.addAction(pasteAction)
+        edit.addSeparator()
+        edit.addAction(undoAction)
+        edit.addAction(redoAction)
 
-        # menuunterpunkt Edit Editor 2
-        edit2.addAction(cutAction2)
-        edit2.addAction(copyAction2)
-        edit2.addAction(pasteAction2)
-        edit2.addSeparator()
-        edit2.addAction(undoAction2)
-        edit2.addAction(redoAction2)
-        
+        # menuunterpunkt PDF
+        pdf.addAction(pdfAction)
         # menuunterpunkt Help
         help.addAction(helpSTTS)
         
         # create statusbar
-        self.statusBar().showMessage("Mustafa Öztürk    |    FAU Erlangen-Nürnberg    |    mustafa.oeztuerk@fau.de")
-
+        self.statusBar().showMessage("Mustafa Öztürk      |      FAU Erlangen-Nürnberg      |      mustafa.oeztuerk@fau.de")
 
         # Schriftgröße
         font = QtGui.QFont()
         font.setPointSize(20)
-        self.text1.setFont(font)
-        self.text2.setFont(font)
+        self.text.setFont(font)
+        
         self.home(self.tagset)
-
     def make_calluser(self, name):
         # http://stackoverflow.com/questions/6784084/how-to-pass-arguments-to-functions-by-the-click-of-button-in-pyqt
         def calluser():
-            print(name)
-            self.text2.insertPlainText(name + " ")
+            self.text.insertPlainText("\\\\" + name)
         return calluser
 
     def home(self, tagset):
@@ -207,13 +170,12 @@ class Window(QtGui.QMainWindow):
     def new(self):
         choice = QtGui.QMessageBox.question(self, "Question", "Clear Editors?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
         if choice == QtGui.QMessageBox.Yes:
-            self.text1.clear()
-            self.text2.clear()
+            self.text.clear()
         else:
             pass
         
     def file_open(self):
-        """ oeffnet eine Datei im oberen Editor """
+        """ oeffnet eine Datei im Editor """
         name = QtGui.QFileDialog.getOpenFileName(self, 'Open File')
         """file = open(name, 'r')
         with file:
@@ -224,25 +186,16 @@ class Window(QtGui.QMainWindow):
             words = [word for line in text for word in line.split()]
             print(words)"""
         with open(name, 'r') as file:
-            text = file.read()
-            self.text1.setText(text)
-            # print aktuell geöffneten text
-            print(text)
-            #words = [word
-                     #for line in text
-                     #for word in line.split()]
-            words = text.split()
-        self.read_from_Editor(words)
-
-
+            textFile = file.read()
+            self.text.setText(textFile)
 
 
     def speichern(self):
         """ speichert den Text im unteren Editor"""
         name = QtGui.QFileDialog.getSaveFileName(self, 'Save File')
         file = open(name, 'w')
-        text = self.text2.toPlainText()
-        file.write(text)
+        textF = self.text.toPlainText()
+        file.write(textF)
         file.close()
 
     def close_application(self):
@@ -253,42 +206,44 @@ class Window(QtGui.QMainWindow):
         else:
             pass
 
+
+    def SavetoPDF(self):
+        """ Speichert das Ergebnis als PDF Datei"""
+        filename = QtGui.QFileDialog.getSaveFileName(self, 'Save to PDF')
+        if not filename.endswith(".pdf"):
+            filename += ".pdf"
+        if filename:
+            printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
+            printer.setPageSize(QtGui.QPrinter.A4)
+            printer.setColorMode(QtGui.QPrinter.Color)
+            printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
+            printer.setOutputFileName(filename)
+            self.text.document().print_(printer)
+
     def stts_link(self):
         url = QtCore.QUrl('http://www.ims.uni-stuttgart.de/forschung/ressourcen/lexika/TagSets/stts-table.html')
         if not QtGui.QDesktopServices.openUrl(url):
             QtGui.QMessageBox.warning(self, 'Open Url', 'Could not open url')
 
 
-
-    def read_from_Editor(self, words):
-        """ reading text from a QTextEdit widget"""
-        #doc = self.text1.document()
-        #block = doc.begin()
-        #lines = [block.text()]
-        #for i in range (1, doc.blockCount() ):
-            #block = block.next()
-            #lines.append(block.text())
-        #print(lines)
-        self.words = words
-        listoflists = []
-        for i in range(0, len(words)):
-            listoflists.append((words[i], None))
-        print(listoflists)
-
-
-
-    def set_cursor_in_edit1_to_startposition(self):
-        """Mit dem START-Button wird der Cursor an den Anfang gesetzt, Cursor dient als Marker, um die Wörter einzeln zu Taggen. Und Editor Nr. 2 wird gecleart"""
-        cursor = self.text1.textCursor()
+    def starting(self):
+        """Mit dem START-Button wird der Cursor an den Anfang gesetzt, Cursor dient als Marker, um die Wörter einzeln zu Taggen. Und Editor wird gecleart"""
+        cursor = self.text.textCursor()
         cursor.movePosition(0, QtGui.QTextCursor.MoveAnchor)
-        self.text1.setTextCursor(cursor)
-        QtCore.QCoreApplication.sendEvent(self.text1, QtGui.QKeyEvent(QtCore.QEvent.KeyPress, QtCore.Qt.Key_Up, QtCore.Qt.NoModifier))
-        #self.text1.moveCursor(QtGui.QTextCursor.NextWord, QtGui.QTextCursor.MoveAnchor)
-        self.text2.clear()
-
+        self.text.setTextCursor(cursor)
+        QtCore.QCoreApplication.sendEvent(self.text, QtGui.QKeyEvent(QtCore.QEvent.KeyPress, QtCore.Qt.Key_Up, QtCore.Qt.NoModifier))
+        self.text.moveCursor(QtGui.QTextCursor.EndOfWord, QtGui.QTextCursor.MoveAnchor)
+        
+    
     def nextButton_clicked(self):
         """ Der Cursor wird zum nächsten Wort bewegt, damit der Benutzer sehen kann, welches Wort grad getaggt wird"""
-        self.text1.moveCursor(QtGui.QTextCursor.NextWord, QtGui.QTextCursor.MoveAnchor)
+        self.text.moveCursor(QtGui.QTextCursor.NextWord, QtGui.QTextCursor.MoveAnchor)
+        self.text.moveCursor(QtGui.QTextCursor.EndOfWord, QtGui.QTextCursor.MoveAnchor)
+
+    def skipping(self):
+        """ unbekannte Wörter werden übersprungen"""
+        self.text.insertPlainText("!!SKIPPED!!")
+
 def run():
     mytags = import_tagsets('tagset.yaml')
     app = QtGui.QApplication(sys.argv)

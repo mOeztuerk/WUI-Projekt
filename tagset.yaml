@@ -11,7 +11,6 @@ STTS:
   - CARD
   - FM
   - ITJ
-  - ORD
   - KOUI
   - KOUS
   - KON
@@ -38,8 +37,6 @@ STTS:
   - PTKVZ
   - PTKANT
   - PTKA
-  - SGML
-  - SPELL
   - TRUNC
   - VVFIN
   - VVIMP
@@ -54,3 +51,6 @@ STTS:
   - VMINF
   - VMPP
   - XY
+  - $,
+  - $.
+  - $(
