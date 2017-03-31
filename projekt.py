@@ -145,8 +145,8 @@ class Window(QtGui.QMainWindow):
         font = QtGui.QFont()
         font.setPointSize(20)
         self.text.setFont(font)
-        
         self.home(self.tagset)
+        
     def make_calluser(self, name):
         # http://stackoverflow.com/questions/6784084/how-to-pass-arguments-to-functions-by-the-click-of-button-in-pyqt
         def calluser():
@@ -154,6 +154,7 @@ class Window(QtGui.QMainWindow):
         return calluser
 
     def home(self, tagset):
+        # hier werden die Buttons für die Tags erstellt
         grid = QtGui.QGridLayout()
         self.buttonBereich.setLayout(grid)
 
