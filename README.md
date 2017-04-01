@@ -1,6 +1,6 @@
 Werkzeuge und Infrastrukturen: Ein POS-Tagger
 ===================
-Ein simpler manueller POS-Tagger mit dem der Nutzer sein Text taggen kann. Die Benutzeroberfläche wurde mit PyQt erstellt.
+Ein simpler manueller POS-Tagger mit dem der Nutzer seinen Text taggen kann. Die Benutzeroberfläche wurde mit PyQt erstellt.
 Benutzt wird das STTS-Tagset.
 
 Installation
