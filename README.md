@@ -7,7 +7,14 @@ Installation
 -------------
 Um den POS-Tagger nutzen zu können, müssen zunächst einige Installationen durchgeführt werden.
 
+Python3:
 ```
 // python3
 sudo apt-get install python3 
+```
+
+PyQt4
+```
+// pyqt4
+sudo apt install python3-pyqt4
 ```
