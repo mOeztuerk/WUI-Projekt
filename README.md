@@ -8,7 +8,5 @@ Installation
 Um den POS-Tagger nutzen zu können, müssen zunächst einige Installationen durchgeführt werden.
 
 ```
-// Foo
-var bar = 0;
-
+// python3
 ```
