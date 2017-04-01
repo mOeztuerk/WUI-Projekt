@@ -23,3 +23,9 @@ Bedienung
 -------------
 > - starte die Anwendung mit python3 projekt.py
 > - öffne einen Text unter Menüpunkt File
+> - drücke den START-Button um den Cursor an der richtigen Stelle zu platzieren
+> - wähle ein Button aus der linken Seite um das Wort mit dem POS-Tag zu taggen
+> - klicke auf Next, um zum nächsten Wort zu springen
+> - wähle ein Button aus der linken Seite um das Wort mit dem POS-Tag zu taggen
+> - usw...
+> - speichere die Datei (entweder als .pdf unter dem Menüpunkt "PDF" oder als txt-Datei under Menüpunkt "File")
