@@ -29,3 +29,5 @@ Bedienung
 > - wähle ein Button aus der linken Seite um das Wort mit dem POS-Tag zu taggen
 > - usw...
 > - speichere die Datei (entweder als .pdf unter dem Menüpunkt "PDF" oder als txt-Datei under Menüpunkt "File")
+> - mit dem Skip-Button können Wörter übersprungen werden
+> - im Help-Menü wird auf die STTS Tag Table verwiesen
